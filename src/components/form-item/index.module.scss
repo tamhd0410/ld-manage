@@ -1,0 +1,33 @@
+.form__item {
+  display: flex;
+  justify-content: flex-end;
+  > label {
+    padding-top: 2px;
+    padding-right: 10px;
+  }
+}
+
+.form__item__input {
+  // flex: 1;
+  display: flex;
+  flex-direction: row;
+  height: 55px;
+  column-gap: 10px;
+  > div {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    > input {
+      border: 1px solid #d9d9d9;
+      border-radius: 5px;
+      padding: 5px 8px;
+      outline: none;
+      height: 30px;
+      width: 100%;
+    }
+    > span {
+      color: red;
+      padding: 0 5px;
+    }
+  }
+}

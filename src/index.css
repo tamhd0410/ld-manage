@@ -1,0 +1,27 @@
+@import './scss/variables.scss';
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+li.ant-menu-item.dashboard__menuItem:active {
+  background: var(--color-blue-30) !important;
+}
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background: var(--color-blue-90) !important;
+  color: #fff;
+}
+
+
+/* .recharts-wrapper{
+  height: 420px !important;
+} */

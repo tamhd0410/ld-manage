@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+#root {
+  width: 100%;
+  display: flex;
+}
+h1 {
+  font-size: 36px;
+}
+a {
+  text-decoration: none;
+}
+:root {
+  --color-blue-5: #ebf2ff;
+  --color-blue-30: #9dc2ff;
+  --color-blue-50: #4f91ff;
+  --color-blue-60: #2979ff;
+  --color-blue-70: #2264d1;
+  --color-blue-80: #1b4ea3;
+  --color-blue-90: #133774;
+}
