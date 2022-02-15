@@ -1,0 +1,13 @@
+.*.sw?
+*.orig
+
+node_modules/
+
+# for direnv
+.envrc
+
+tmp/
+package-lock.json
+
+# OS
+.DS_Store
