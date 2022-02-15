@@ -16,7 +16,7 @@ export const UserPage: React.FC = () => {
     setVisibleCreate((prev) => !prev);
   };
   return (
-    <LayoutAdmin>
+    <LayoutAdmin title='User Management'>
       <div className={clsx('div__content')}>
         {console.log('UserPage')}
         <div>

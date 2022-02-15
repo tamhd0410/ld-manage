@@ -11,84 +11,88 @@ interface IProps {
 export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
   const dispatch = useAppDispatch();
   const dataFetch = useAppSelector(getListUser);
-  const [items, setItems] = useState([
-    { id: '1', name: 'nam' },
-    { id: '2', name: 'nam2' },
-  ]);
-  const [detailVisible, setDetailVisible] = useState<boolean>(false);
-  const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
+  // const [items, setItems] = useState([]);
+  // const [detailVisible, setDetailVisible] = useState<boolean>(false);
+  // const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
 
-  const handleMore = () => {
-    setDetailVisible(true);
-  };
-  const handleEdit = () => {
-    setVisibleEdit(true);
-    setItems([
-      { id: '1', name: 'nam' },
-      { id: '2', name: 'nam2' },
-    ]);
-  };
-  const handleOkEdit = () => {
-    setVisibleEdit(false);
-  };
-  const handleOk = () => {
-    setDetailVisible(false);
-  };
+  // const handleMore = () => {
+  //   setDetailVisible(true);
+  // };
+  // const handleEdit = () => {
+  //   setVisibleEdit(true);
+  //   setItems([
+  //     { id: '1', name: 'nam' },
+  //     { id: '2', name: 'nam2' },
+  //   ]);
+  // };
+  // const handleOkEdit = () => {
+  //   setVisibleEdit(false);
+  // };
+  // const handleOk = () => {
+  //   setDetailVisible(false);
+  // };
 
   useEffect(() => {
     dispatch(fetchListUser());
   }, [dispatch]);
 
-  const handleAddField = () => {
-    console.log('handleAddField');
-    setItems([...items, { id: '', name: '' }]);
-  };
+  // const handleAddField = () => {
+  //   console.log('handleAddField');
+  //   setItems([...items, { id: '', name: '' }]);
+  // };
 
-  const handleRemoveField = (index: any) => {
-    console.log('handleRemoveField: ' + index);
-    let cloneItems = [...items];
-    cloneItems.splice(parseInt(index), 1);
-    setItems(cloneItems);
-  };
+  // const handleRemoveField = (index: any) => {
+  //   console.log('handleRemoveField: ' + index);
+  //   let cloneItems = [...items];
+  //   cloneItems.splice(parseInt(index), 1);
+  //   setItems(cloneItems);
+  // };
 
   const columns = [
     {
-      title: 'UserName',
-      dataIndex: 'userName',
-      key: 'userName',
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      key: 'username',
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
     },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text: any, record: any) => (
-        <Space size='middle'>
-          <Button type='link' onClick={handleMore}>
-            More
-          </Button>
-          <Button type='link' onClick={handleEdit}>
-            Delete
-          </Button>
-          <Button type='link' onClick={handleEdit}>
-            Edit
-          </Button>
-        </Space>
-      ),
-    },
+    // {
+    //   title: 'Action',
+    //   key: 'action',
+    //   render: (text: any, record: any) => (
+    //     <Space size='middle'>
+    //       <Button type='link' onClick={handleMore}>
+    //         More
+    //       </Button>
+    //       <Button type='link' onClick={handleEdit}>
+    //         Delete
+    //       </Button>
+    //       <Button type='link' onClick={handleEdit}>
+    //         Edit
+    //       </Button>
+    //     </Space>
+    //   ),
+    // },
   ];
 
   const data: any[] = [];
-  dataFetch?.pagedResult?.items.map((item: { _id: any }) =>
-    data.push({ ...item, key: item._id })
-  );
+  if (dataFetch && dataFetch.length > 0) {
+    dataFetch?.map((item: { id: any }) =>
+      data.push({ ...item, key: item.id })
+    );
+  }
+
 
   return (
     <>
-      {console.log('render TableUser')}
       <Table
         onChange={(e) => {
           console.log(e);
@@ -97,7 +101,7 @@ export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
         dataSource={data}
         scroll={{ y: 240 }}
       />
-      <Modal
+      {/* <Modal
         title='Detail Infor'
         visible={detailVisible}
         onOk={handleOk}
@@ -117,7 +121,7 @@ export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
         onCancel={handleOkEdit}
         onAddField={handleAddField}
         onRemoveField={handleRemoveField}
-      />
+      /> */}
     </>
   );
 };

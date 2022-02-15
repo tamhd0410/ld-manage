@@ -3,7 +3,12 @@ import { NavBar } from 'components/nav-bar/index';
 import styles from './index.module.scss';
 import { Header } from 'components/header/index';
 
-export const LayoutAdmin: React.FC = ({ children }) => {
+interface IProps {
+  title: string;
+}
+
+export const LayoutAdmin: React.FC<IProps> = ({ title, children }) => {
+  console.log('layout admin', children)
   return (
     <>
       <div className={styles.container}>
@@ -11,7 +16,7 @@ export const LayoutAdmin: React.FC = ({ children }) => {
           <NavBar />
         </aside>
         <section className={styles.container__right}>
-          <Header title='Title bla bla'/>
+          <Header title={title} />
           <div className={styles.body}>{children}</div>
           <div className={styles.footer}>Powered by AI-FAQボット</div>
         </section>

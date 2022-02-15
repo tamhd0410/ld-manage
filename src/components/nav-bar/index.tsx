@@ -2,13 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Menu, Avatar } from 'antd';
 import { LogoutIcon } from 'assets/icons/exit';
 import {
-  AppstoreOutlined,
-  HomeOutlined,
-  InfoCircleOutlined,
   UserOutlined,
-  LineChartOutlined,
-  WechatOutlined,
 } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 import styles from './index.module.scss';
 import clsx from 'clsx';
 import { useNavigate } from 'react-router-dom';
@@ -38,47 +34,16 @@ export const NavBar: React.FC = () => {
         style={{ width: 100 }}
       >
         <Menu.Item
-          key='qa'
-          icon={<AppstoreOutlined className={styles.nav__menuItem__icon} />}
+          title='User Management'
+
+          key='user'
+          icon={<UserOutlined className={styles.nav__menuItem__icon} />}
           className={styles.nav__menuItem}
         ></Menu.Item>
-        <Menu.Item
-          key='widget-setting'
-          icon={<WechatOutlined className={styles.nav__menuItem__icon} />}
-          className={styles.nav__menuItem}
-        ></Menu.Item>
-        <Menu.Item
-          key='analysis'
-          icon={<LineChartOutlined className={styles.nav__menuItem__icon} />}
-          className={styles.nav__menuItem}
-        ></Menu.Item>
+
       </Menu>
 
       <div>
-        <Menu
-          className={clsx(styles.nav__menu, styles.bottom)}
-          onClick={handleClick}
-          selectedKeys={[current]}
-          mode='inline'
-          style={{ width: 100 }}
-        >
-          <Menu.Item
-            key='user'
-            icon={<UserOutlined className={styles.nav__menuItem__icon} />}
-            className={styles.nav__menuItem}
-          ></Menu.Item>
-          <Menu.Item
-            key='infor'
-            icon={<InfoCircleOutlined className={styles.nav__menuItem__icon} />}
-            className={styles.nav__menuItem}
-          ></Menu.Item>
-          <Menu.Item
-            key='home'
-            icon={<HomeOutlined className={styles.nav__menuItem__icon} />}
-            className={styles.nav__menuItem}
-          ></Menu.Item>
-        </Menu>
-
         <div className={styles.logout}>
           <div className={styles.logout__inner}>
             <Avatar
