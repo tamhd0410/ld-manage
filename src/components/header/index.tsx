@@ -1,16 +1,27 @@
 import React from 'react';
 import styles from './index.module.scss';
-import clsx from 'clsx';
+import { PageHeader, Button } from 'antd';
 
 interface IProps {
   title: string;
+  buttons?: string[];
 }
-export const Header: React.FC<IProps> = ({ title }) => {
+export const Header: React.FC<IProps> = ({ title, buttons }) => {
+  const buttonHeader: any[] = []
+  buttons?.map((item, index) => {
+    buttonHeader.push(
+      <Button key={index} type="primary">
+        {item}
+      </Button>
+    )
+  })
   return (
-    <header>
-      <div className={clsx(styles.header__infor, 'div__header')}>
-        <span>{title}</span>
-      </div>
-    </header>
+    <PageHeader
+      className={styles.dev__header}
+      onBack={() => window.history.back()}
+      title={title}
+      extra={buttonHeader}
+    >
+    </PageHeader>
   );
 };

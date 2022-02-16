@@ -4,12 +4,12 @@ import { userApi } from 'apis/userApi';
 
 export interface UserSlice {
   listUser: any;
-  status: 'idle' | 'loading' | 'failed';
+  loading: boolean;
 }
 
 const initialState: UserSlice = {
   listUser: {},
-  status: 'idle',
+  loading: true
 };
 
 export const signIn = createAsyncThunk('user/signIn', async () => {
@@ -39,22 +39,21 @@ export const usersSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchListUser.pending, (state) => {
-        state.status = 'loading';
+        state.loading = true;
       })
       .addCase(fetchListUser.fulfilled, (state, { payload }) => {
-        state.status = 'idle';
         state.listUser = payload;
+        state.loading = false;
       })
       .addCase(signIn.pending, (state, { payload }) => {
-        state.status = 'loading';
+        state.loading = false;
       })
       .addCase(signIn.fulfilled, (state, { payload }) => {
-        state.status = 'idle';
       });
   },
 });
 
-export const getListUser = (state: RootState) => state.user?.listUser;
+export const getListUser = (state: RootState) => state.user;
 
 // export const { increment, decrement, incrementByAmount } = usersSlice.actions;
 

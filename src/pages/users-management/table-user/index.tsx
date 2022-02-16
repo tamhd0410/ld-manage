@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Table, Space, Button, Modal } from 'antd';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchListUser, getListUser } from 'redux/user-slice';
+import styles from './index.module.scss';
+import { Spin } from 'antd';
 import { EditForm } from './edit-form';
 
 interface IProps {
@@ -84,44 +86,52 @@ export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
   ];
 
   const data: any[] = [];
-  if (dataFetch && dataFetch.length > 0) {
-    dataFetch?.map((item: { id: any }) =>
+  if (dataFetch?.listUser && dataFetch.listUser.length > 0) {
+    dataFetch?.listUser.map((item: { id: any }) =>
       data.push({ ...item, key: item.id })
     );
   }
 
-
   return (
     <>
-      <Table
-        onChange={(e) => {
-          console.log(e);
-        }}
-        columns={columns}
-        dataSource={data}
-        scroll={{ y: 240 }}
-      />
-      {/* <Modal
-        title='Detail Infor'
-        visible={detailVisible}
-        onOk={handleOk}
-        onCancel={handleOk}
-        maskClosable={false}
-      >
-        asdasdasd
-      </Modal>
-      <EditForm
-        formData={{
-          userName: 'nam',
-          password: 'nam123123',
-          items: items,
-        }}
-        visible={visibleEdit}
-        onOk={handleOkEdit}
-        onCancel={handleOkEdit}
-        onAddField={handleAddField}
-        onRemoveField={handleRemoveField}
-      /> */}
+      {
+        dataFetch.loading &&
+        <div className={styles.loading__container}>
+          <Spin size="large" tip="Loading...">
+          </Spin>
+        </div>
+      }
+      {
+        !dataFetch?.loading &&
+        <Table
+          onChange={(e) => {
+            console.log(e);
+          }}
+          columns={columns}
+          dataSource={data}
+        />
+        // {/* <Modal
+        //   title='Detail Infor'
+        //   visible={detailVisible}
+        //   onOk={handleOk}
+        //   onCancel={handleOk}
+        //   maskClosable={false}
+        // >
+        //   asdasdasd
+        // </Modal>
+        // <EditForm
+        //   formData={{
+        //     userName: 'nam',
+        //     password: 'nam123123',
+        //     items: items,
+        //   }}
+        //   visible={visibleEdit}
+        //   onOk={handleOkEdit}
+        //   onCancel={handleOkEdit}
+        //   onAddField={handleAddField}
+        //   onRemoveField={handleRemoveField}
+        // /> */}
+      }
     </>
   );
 };

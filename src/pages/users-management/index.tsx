@@ -15,14 +15,16 @@ export const UserPage: React.FC = () => {
   const addUser = () => {
     setVisibleCreate((prev) => !prev);
   };
+
+  const buttons = ['Add new'];
+
   return (
-    <LayoutAdmin title='User Management'>
+    <LayoutAdmin buttons={buttons} title='User Management'>
       <div className={clsx('div__content')}>
-        {console.log('UserPage')}
-        <div>
+        {/* <div>
           <Button onClick={addUser}>add</Button>
           <Button onClick={getToken}>Get Token</Button>
-        </div>
+        </div> */}
         <TableUser visibleCreate={visibleCreate} />
       </div>
     </LayoutAdmin>
