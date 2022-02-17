@@ -128,6 +128,7 @@ export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
           }}
           columns={columns}
           dataSource={users}
+          pagination={{ pageSize: 15 }}
         />
       }
       {
