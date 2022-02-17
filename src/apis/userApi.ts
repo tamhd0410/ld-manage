@@ -17,8 +17,8 @@ export const userApi = {
     const url = `/admin/delete-user/${payload}`;
     return await axiosClient.delete(url, payload);
   },
-  editUser: async (payload: any) => {
-    const url = `/admin/updte-user`;
+  editUser: async (payload?: any) => {
+    const url = `/user/${payload.uid}`;
     return await axiosClient.put(url, payload);
   },
 };

@@ -1,42 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import { Spin, Table, Space, Button, Modal } from 'antd';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { fetchListUser, getListUser } from 'redux/user-slice';
+import { fetchEditUser, fetchListUser, getListUser, getIsLoadingEdit } from 'redux/user-slice';
 import {
   EditOutlined,
 } from '@ant-design/icons';
 import styles from './index.module.scss';
+import { useForm } from 'react-hook-form';
+import { FormItem } from 'components/form-item';
+import { EditForm } from './edit-form';
 // import { EditForm } from './edit-form';
 
 interface IProps {
   visibleCreate: boolean;
 }
 
+interface User {
+  key?: string,
+  uid?: string,
+  name?: string,
+  full_name?: string,
+  first_name?: string,
+  last_name?: string,
+  phone?: string
+}
+
 export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
   const dispatch = useAppDispatch();
   const dataFetch = useAppSelector(getListUser);
+  const isLoadingEdit = useAppSelector(getIsLoadingEdit);
   const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
+  const [user, setUser] = useState<User>({});
+  const [users, setUsers] = useState<User[]>([]);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    clearErrors,
+    formState: { errors },
+  } = useForm({ mode: 'onBlur' });
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const showModal = () => {
+  const handleEditUser = (data: User) => {
+    setUser(data);
+    setValue('editForm', data);
     setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-  const handleEdit = () => {
-    setVisibleEdit(true);
+
+  const handleSaveUser = (data: any) => {
+    console.log('Edit User', data.editForm);
+    const user = data.editForm;
+    dispatch(fetchEditUser(user));
+    console.log('xsxs', isLoadingEdit)
   };
 
   useEffect(() => {
     dispatch(fetchListUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    const data: User[] = [];
+    if (dataFetch?.listUser && dataFetch.listUser.length > 0) {
+      dataFetch?.listUser.map((item: { uid: string, first_name: string, last_name: string }) =>
+        data.push({ ...item, full_name: item.first_name + ' ' + item.last_name, key: item.uid })
+      );
+    }
+    setUsers(data);
+  }, [dataFetch]);
 
   const columns = [
     {
@@ -59,30 +94,17 @@ export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
       key: 'action',
       width: '80px',
       align: 'center' as 'center',
-      render: (text: any, record: any) => (
-        <Space size='middle'>
-          {/* <Button type='link' onClick={handleMore}>
-            More
-          </Button> */}
-          <Button type='link' onClick={showModal}>
-            <EditOutlined />
-          </Button>
-          {/* <Button type='link' onClick={handleEdit}>
-            Edit
-          </Button> */}
-        </Space>
-      ),
+      render: (text: any, record: any) => {
+        return (
+          <Space size='middle'>
+            <Button type='link' onClick={() => handleEditUser(record)}>
+              <EditOutlined />
+            </Button>
+          </Space>
+        )
+      },
     },
   ];
-
-  const data: any[] = [];
-  if (dataFetch?.listUser && dataFetch.listUser.length > 0) {
-    dataFetch?.listUser.map((item: { id: string, first_name: string, last_name: string }) =>
-      data.push({ ...item, full_name: item.first_name + ' ' + item.last_name, key: item.id })
-    );
-  }
-
-  console.log('list users', data);
 
   return (
     <>
@@ -100,14 +122,60 @@ export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
             console.log(e);
           }}
           columns={columns}
-          dataSource={data}
+          dataSource={users}
         />
       }
       {
-        <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
-          <p>Some contents...</p>
+        <Modal okText='Save' title="Edit User" visible={isModalVisible} onOk={handleSubmit(handleSaveUser)} onCancel={handleCancel}>
+          {
+            <form onSubmit={handleSubmit(handleSaveUser)}>
+              <FormItem label='First name :' className={styles.form__item}>
+                <div>
+                  <input
+                    type='text'
+                    {...register('editForm.first_name', {
+                      validate: {
+                        positive: (v) => v.trim().length > 0,
+                      },
+                    })}
+                  />
+                  {errors?.editForm?.last_name?.type === 'positive' && (
+                    <span>First name is required.</span>
+                  )}
+                </div>
+              </FormItem>
+              <FormItem label='Last name :' className={styles.form__item}>
+                <div>
+                  <input
+                    type='text'
+                    {...register('editForm.last_name', {
+                      validate: {
+                        positive: (v) => v.trim().length > 0,
+                      },
+                    })}
+                  />
+                  {errors?.editForm?.last_name?.type === 'positive' && (
+                    <span>Last name is required</span>
+                  )}
+                </div>
+              </FormItem>
+              <FormItem label='Phone :' className={styles.form__item}>
+                <div>
+                  <input
+                    type='text'
+                    {...register('editForm.phone', {
+                      validate: {
+                        positive: (v) => v.trim().length > 0,
+                      },
+                    })}
+                  />
+                  {errors?.editForm?.phone?.type === 'positive' && (
+                    <span>must be input!</span>
+                  )}
+                </div>
+              </FormItem>
+            </form>
+          }
         </Modal>
       }
     </>

@@ -5,11 +5,13 @@ import { userApi } from 'apis/userApi';
 export interface UserSlice {
   listUser: any;
   loading: boolean;
+  loadingEdit: boolean;
 }
 
 const initialState: UserSlice = {
   listUser: {},
-  loading: true
+  loading: true,
+  loadingEdit: false
 };
 
 export const signIn = createAsyncThunk('user/signIn', async () => {
@@ -26,6 +28,14 @@ export const fetchListUser = createAsyncThunk(
   'user/fetchListUser',
   async () => {
     const response = await userApi.getListUser();
+    return response.data;
+  }
+);
+
+export const fetchEditUser = createAsyncThunk(
+  'user/fetchEditUser',
+  async (user: any) => {
+    const response = await userApi.editUser(user);
     return response.data;
   }
 );
@@ -48,15 +58,21 @@ export const usersSlice = createSlice({
         state.listUser = payload;
         state.loading = false;
       })
-      .addCase(signIn.pending, (state, { payload }) => {
-        state.loading = false;
+      .addCase(fetchEditUser.pending, (state, { payload }) => {
+        state.loadingEdit = true;
       })
-      .addCase(signIn.fulfilled, (state, { payload }) => {
+      .addCase(fetchEditUser.rejected, (state) => {
+        state.loadingEdit = false;
+      })
+      .addCase(fetchEditUser.fulfilled, (state, { payload }) => {
+        state.loadingEdit = false;
       });
   },
 });
 
 export const getListUser = (state: RootState) => state.user;
+export const getIsLoadingEdit = (state: RootState) => state.user.loadingEdit;
+
 
 // export const { increment, decrement, incrementByAmount } = usersSlice.actions;
 
