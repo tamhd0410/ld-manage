@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Space, Button, Modal } from 'antd';
+import { Spin, Table, Space, Button, Modal } from 'antd';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
 import { fetchListUser, getListUser } from 'redux/user-slice';
+import {
+  EditOutlined,
+} from '@ant-design/icons';
 import styles from './index.module.scss';
-import { Spin } from 'antd';
-import { EditForm } from './edit-form';
+// import { EditForm } from './edit-form';
 
 interface IProps {
   visibleCreate: boolean;
@@ -13,84 +15,74 @@ interface IProps {
 export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
   const dispatch = useAppDispatch();
   const dataFetch = useAppSelector(getListUser);
-  // const [items, setItems] = useState([]);
-  // const [detailVisible, setDetailVisible] = useState<boolean>(false);
-  // const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
+  const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
 
-  // const handleMore = () => {
-  //   setDetailVisible(true);
-  // };
-  // const handleEdit = () => {
-  //   setVisibleEdit(true);
-  //   setItems([
-  //     { id: '1', name: 'nam' },
-  //     { id: '2', name: 'nam2' },
-  //   ]);
-  // };
-  // const handleOkEdit = () => {
-  //   setVisibleEdit(false);
-  // };
-  // const handleOk = () => {
-  //   setDetailVisible(false);
-  // };
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  const handleEdit = () => {
+    setVisibleEdit(true);
+  };
 
   useEffect(() => {
     dispatch(fetchListUser());
   }, [dispatch]);
 
-  // const handleAddField = () => {
-  //   console.log('handleAddField');
-  //   setItems([...items, { id: '', name: '' }]);
-  // };
-
-  // const handleRemoveField = (index: any) => {
-  //   console.log('handleRemoveField: ' + index);
-  //   let cloneItems = [...items];
-  //   cloneItems.splice(parseInt(index), 1);
-  //   setItems(cloneItems);
-  // };
-
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'Full name',
+      dataIndex: 'full_name',
+      key: 'full_name'
     },
     {
       title: 'Username',
-      dataIndex: 'username',
-      key: 'username',
+      dataIndex: 'name',
+      key: 'name'
     },
     {
       title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      dataIndex: 'mail',
+      key: 'mail'
     },
-    // {
-    //   title: 'Action',
-    //   key: 'action',
-    //   render: (text: any, record: any) => (
-    //     <Space size='middle'>
-    //       <Button type='link' onClick={handleMore}>
-    //         More
-    //       </Button>
-    //       <Button type='link' onClick={handleEdit}>
-    //         Delete
-    //       </Button>
-    //       <Button type='link' onClick={handleEdit}>
-    //         Edit
-    //       </Button>
-    //     </Space>
-    //   ),
-    // },
+    {
+      title: 'Action',
+      key: 'action',
+      width: '80px',
+      align: 'center' as 'center',
+      render: (text: any, record: any) => (
+        <Space size='middle'>
+          {/* <Button type='link' onClick={handleMore}>
+            More
+          </Button> */}
+          <Button type='link' onClick={showModal}>
+            <EditOutlined />
+          </Button>
+          {/* <Button type='link' onClick={handleEdit}>
+            Edit
+          </Button> */}
+        </Space>
+      ),
+    },
   ];
 
   const data: any[] = [];
   if (dataFetch?.listUser && dataFetch.listUser.length > 0) {
-    dataFetch?.listUser.map((item: { id: any }) =>
-      data.push({ ...item, key: item.id })
+    dataFetch?.listUser.map((item: { id: string, first_name: string, last_name: string }) =>
+      data.push({ ...item, full_name: item.first_name + ' ' + item.last_name, key: item.id })
     );
   }
+
+  console.log('list users', data);
 
   return (
     <>
@@ -110,27 +102,13 @@ export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
           columns={columns}
           dataSource={data}
         />
-        // {/* <Modal
-        //   title='Detail Infor'
-        //   visible={detailVisible}
-        //   onOk={handleOk}
-        //   onCancel={handleOk}
-        //   maskClosable={false}
-        // >
-        //   asdasdasd
-        // </Modal>
-        // <EditForm
-        //   formData={{
-        //     userName: 'nam',
-        //     password: 'nam123123',
-        //     items: items,
-        //   }}
-        //   visible={visibleEdit}
-        //   onOk={handleOkEdit}
-        //   onCancel={handleOkEdit}
-        //   onAddField={handleAddField}
-        //   onRemoveField={handleRemoveField}
-        // /> */}
+      }
+      {
+        <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
       }
     </>
   );

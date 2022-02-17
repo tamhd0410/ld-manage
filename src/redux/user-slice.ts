@@ -41,6 +41,9 @@ export const usersSlice = createSlice({
       .addCase(fetchListUser.pending, (state) => {
         state.loading = true;
       })
+      .addCase(fetchListUser.rejected, (state) => {
+        state.loading = false;
+      })
       .addCase(fetchListUser.fulfilled, (state, { payload }) => {
         state.listUser = payload;
         state.loading = false;

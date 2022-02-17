@@ -6,7 +6,7 @@ export const userApi = {
     return await axiosClient.post(url, payload);
   },
   getListUser: async () => {
-    const url = `/users`;
+    const url = `/list_user_account`;
     return await axiosClient.get(url);
   },
   addNewUser: async (payload: any) => {

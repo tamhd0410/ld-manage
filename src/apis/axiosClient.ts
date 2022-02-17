@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const apiUrl = `https://jsonplaceholder.typicode.com/`;
+const apiUrl = `https://dev.labanso.com/api/`;
 
 const axiosClient = axios.create({
   baseURL: `${apiUrl}`,
@@ -15,8 +15,9 @@ axiosClient.interceptors.request.use(async (config) => {
   };
 
   const token = localStorage.getItem('token');
+  console.log('Token', token)
   if (token) {
-    customHeaders.Authorization = `Beaer ${token}`;
+    customHeaders.Authorization = `Bearer ${token}`;
   }
 
   return {
