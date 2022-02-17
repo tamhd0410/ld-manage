@@ -66,12 +66,17 @@ export const usersSlice = createSlice({
       })
       .addCase(fetchEditUser.fulfilled, (state, { payload }) => {
         state.loadingEdit = false;
+        console.log('payload', payload);
+        let findIndex = state.listUser.findIndex(
+          (user: any) => user.uid === payload.uid
+        );
+        console.log('index', findIndex);
+        state.listUser[findIndex] = { ...payload };
       });
   },
 });
 
-export const getListUser = (state: RootState) => state.user;
-export const getIsLoadingEdit = (state: RootState) => state.user.loadingEdit;
+export const getUser = (state: RootState) => state.user;
 
 
 // export const { increment, decrement, incrementByAmount } = usersSlice.actions;

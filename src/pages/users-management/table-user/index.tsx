@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Spin, Table, Space, Button, Modal } from 'antd';
 import { useAppDispatch, useAppSelector } from 'redux/hooks';
-import { fetchEditUser, fetchListUser, getListUser, getIsLoadingEdit } from 'redux/user-slice';
+import { fetchEditUser, fetchListUser, getUser } from 'redux/user-slice';
 import {
   EditOutlined,
 } from '@ant-design/icons';
 import styles from './index.module.scss';
 import { useForm } from 'react-hook-form';
 import { FormItem } from 'components/form-item';
-import { EditForm } from './edit-form';
-// import { EditForm } from './edit-form';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 interface IProps {
   visibleCreate: boolean;
@@ -27,9 +26,8 @@ interface User {
 
 export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
   const dispatch = useAppDispatch();
-  const dataFetch = useAppSelector(getListUser);
-  const isLoadingEdit = useAppSelector(getIsLoadingEdit);
-  const [visibleEdit, setVisibleEdit] = useState<boolean>(false);
+  const dataFetch = useAppSelector(getUser);
+  const [isLoadingEdit, setIsLoadingEdit] = useState<boolean>(false)
   const [user, setUser] = useState<User>({});
   const [users, setUsers] = useState<User[]>([]);
   const {
@@ -52,11 +50,18 @@ export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
     setIsModalVisible(false);
   };
 
-  const handleSaveUser = (data: any) => {
+  const handleSaveUser = async (data: any) => {
     console.log('Edit User', data.editForm);
     const user = data.editForm;
-    dispatch(fetchEditUser(user));
-    console.log('xsxs', isLoadingEdit)
+    try {
+      const actionResult = await dispatch(fetchEditUser(user));
+      const response = unwrapResult(actionResult);
+      if (response.uid) {
+        setIsModalVisible(false);
+      }
+    } catch (error) {
+      setIsModalVisible(false);
+    }
   };
 
   useEffect(() => {
@@ -126,7 +131,7 @@ export const TableUser: React.FC<IProps> = ({ visibleCreate }) => {
         />
       }
       {
-        <Modal okText='Save' title="Edit User" visible={isModalVisible} onOk={handleSubmit(handleSaveUser)} onCancel={handleCancel}>
+        <Modal okText='Save' confirmLoading={dataFetch.loadingEdit} title="Edit User" visible={isModalVisible} onOk={handleSubmit(handleSaveUser)} onCancel={handleCancel}>
           {
             <form onSubmit={handleSubmit(handleSaveUser)}>
               <FormItem label='First name :' className={styles.form__item}>
